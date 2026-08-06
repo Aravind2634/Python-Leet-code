@@ -1,0 +1,70 @@
+# -------------------------------
+# Server Log Analyzer
+# -------------------------------
+
+logs = [
+    "INFO: Server Started",
+    "ERROR: Database Connection Failed",
+    "WARNING: Low Memory",
+    "INFO: User Login",
+    "ERROR: Timeout",
+    "INFO: Request Received",
+    "WARNING: CPU Usage High",
+    "ERROR: Authentication Failed",
+    "INFO: Response Sent",
+    "ERROR: Timeout",
+    "ERROR: Database Connection Failed",
+    "ERROR: Timeout",
+]
+
+# Count log levels
+log_count = {
+    "INFO": 0,
+    "WARNING": 0,
+    "ERROR": 0
+}
+
+# Count each error message
+error_messages = {}
+
+for log in logs:
+
+    level, message = log.split(": ", 1)
+
+    # Count INFO/WARNING/ERROR
+    if level in log_count:
+        log_count[level] += 1
+
+    # Count Error Messages
+    if level == "ERROR":
+        if message in error_messages:
+            error_messages[message] += 1
+        else:
+            error_messages[message] = 1
+
+
+print("=" * 40)
+print("SERVER LOG REPORT")
+print("=" * 40)
+
+print(f"Total Logs     : {len(logs)}")
+print(f"INFO Logs      : {log_count['INFO']}")
+print(f"WARNING Logs   : {log_count['WARNING']}")
+print(f"ERROR Logs     : {log_count['ERROR']}")
+
+print("\nError Frequency")
+print("-" * 40)
+
+for error, count in sorted(error_messages.items(),
+                           key=lambda x: x[1],
+                           reverse=True):
+    print(f"{error:<30} {count}")
+
+# Find most common error
+most_common = max(error_messages.items(), key=lambda x: x[1])
+
+print("\nMost Frequent Error")
+print("-" * 40)
+print(f"{most_common[0]} ({most_common[1]} times)")
+
+print("=" * 40)
